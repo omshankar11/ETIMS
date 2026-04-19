@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import API from "../services/api";
 import AuthContext from "../context/AuthContext";
+import { generateInvoicePDF } from "../utils/pdfGenerator";
 
 const Dashboard = () => {
     const { user } = useContext(AuthContext);
@@ -58,6 +59,7 @@ const Dashboard = () => {
                             <th className="p-4 border-b">Date</th>
                             <th className="p-4 border-b">Amount</th>
                             <th className="p-4 border-b">Status</th>
+                            <th className="p-4 border-b">Action</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -76,11 +78,19 @@ const Dashboard = () => {
                                             {tx.status}
                                         </span>
                                     </td>
+                                    <td className="p-4 border-b">
+                                        <button
+                                            onClick={() => generateInvoicePDF(tx)}
+                                            className="text-blue-600 hover:text-blue-800 text-sm font-medium"
+                                        >
+                                            Download
+                                        </button>
+                                    </td>
                                 </tr>
                             ))
                         ) : (
                             <tr>
-                                <td colSpan="5" className="p-4 text-center text-gray-500">No recent transactions</td>
+                                <td colSpan="6" className="p-4 text-center text-gray-500">No recent transactions</td>
                             </tr>
                         )}
                     </tbody>
