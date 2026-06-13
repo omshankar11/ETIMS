@@ -18,6 +18,10 @@ const Register = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (formData.password.length < 6) {
+            setError("Password must be at least 6 characters long");
+            return;
+        }
         const result = await register(formData);
         if (!result.success) {
             setError(result.message);
@@ -53,13 +57,14 @@ const Register = () => {
                         />
                     </div>
                     <div className="mb-4">
-                        <label className="block text-gray-700 text-sm font-bold mb-2">Password</label>
+                        <label className="block text-gray-700 text-sm font-bold mb-2">Password (min 6 characters)</label>
                         <input
                             type="password"
                             name="password"
                             value={formData.password}
                             onChange={handleChange}
                             className="w-full px-3 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-green-500"
+                            minLength={6}
                             required
                         />
                     </div>

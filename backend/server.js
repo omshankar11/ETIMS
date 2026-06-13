@@ -4,7 +4,6 @@ const cors = require("cors");
 const connectDB = require("./config/db");
 
 dotenv.config();
-connectDB();
 
 const app = express();
 
@@ -23,7 +22,33 @@ app.get("/", (req, res) => {
   res.send("ETIMS Backend is running 🚀");
 });
 
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+// Error handling middleware
+app.use((err, req, res, next) => {
+  console.error("Error handler caught error:", err);
+  
+  if (err.name === "ValidationError") {
+    const messages = Object.values(err.errors).map(val => val.message);
+    return res.status(400).json({ message: messages.join(", ") });
+  }
+
+  res.status(500).json({
+    message: err.message || "Internal Server Error",
+    stack: process.env.NODE_ENV === "production" ? null : err.stack
+  });
 });
+
+const PORT = process.env.PORT || 5000;
+
+const startServer = async () => {
+  try {
+    await connectDB();
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error("Failed to start server:", error.message);
+    process.exit(1);
+  }
+};
+
+startServer();
