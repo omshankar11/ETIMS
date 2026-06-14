@@ -44,3 +44,5 @@ A full-stack web application for managing tax invoices, businesses, and generati
 3.  Go to "Businesses" to register your business details.
 4.  Go to "Invoices" to create tax invoices.
 5.  View "Dashboard" for insights.
+
+ 
